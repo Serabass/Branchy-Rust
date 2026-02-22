@@ -1,12 +1,8 @@
-use branchy::{
-  default_registry, deserialize_program, interpret, parse_program, resolve_includes,
-  serialize_program,
-};
-use rand::rngs::StdRng;
-use rand::SeedableRng;
+//! CLI entry: run | compile.
+
 use std::env;
-use std::fs;
-use std::path::Path;
+
+mod run;
 
 fn main() -> Result<(), String> {
   let args: Vec<String> = env::args().collect();
@@ -22,7 +18,7 @@ fn main() -> Result<(), String> {
         return Err("branchy run <file> [input] [--seed N]".into());
       }
       let (input, seed) = parse_run_args(&args[3..])?;
-      run(&args[2], input, seed)
+      run::run(&args[2], input, seed)
     }
     "compile" => {
       let mut input = None;
@@ -42,13 +38,12 @@ fn main() -> Result<(), String> {
       }
       let inp = input.ok_or("branchy compile <input.branchy> -o <output.branchyc>")?;
       let out = output.ok_or("branchy compile <input.branchy> -o <output.branchyc>")?;
-      compile(&inp, &out)
+      run::compile(&inp, &out)
     }
-    _ => run(sub, None, None),
+    _ => run::run(sub, None, None),
   }
 }
 
-/// Parse run args: [input] [--seed N]. Returns (input, seed: None = random).
 fn parse_run_args(args: &[String]) -> Result<(Option<&str>, Option<u64>), String> {
   let mut input = None;
   let mut seed = None;
@@ -68,41 +63,4 @@ fn parse_run_args(args: &[String]) -> Result<(Option<&str>, Option<u64>), String
     }
   }
   Ok((input, seed))
-}
-
-fn run(path: &str, input: Option<&str>, seed: Option<u64>) -> Result<(), String> {
-  let bytes = fs::read(path).map_err(|e| e.to_string())?;
-  let program = if path.ends_with(".branchyc") || (bytes.len() >= 4 && &bytes[0..4] == b"BRCH") {
-    deserialize_program(&bytes)?
-  } else {
-    let src = String::from_utf8(bytes).map_err(|e| e.to_string())?;
-    let p = parse_program(&src).map_err(|e| e.to_string())?;
-    let base = Path::new(path).parent().unwrap_or(Path::new("."));
-    resolve_includes(p, |pth| {
-      let full = base.join(pth);
-      fs::read_to_string(&full).map_err(|e| e.to_string())
-    })?
-  };
-  let builtins = default_registry();
-  let mut rng: StdRng = match seed {
-    Some(s) => StdRng::seed_from_u64(s),
-    None => StdRng::seed_from_u64(rand::random::<u64>()),
-  };
-  let (result, _trace) =
-    interpret(&program, &builtins, &mut rng, input).map_err(|e| e.to_string())?;
-  println!("{}", result);
-  Ok(())
-}
-
-fn compile(input: &str, output: &str) -> Result<(), String> {
-  let src = fs::read_to_string(input).map_err(|e| e.to_string())?;
-  let program = parse_program(&src).map_err(|e| e.to_string())?;
-  let base = Path::new(input).parent().unwrap_or(Path::new("."));
-  let program = resolve_includes(program, |pth| {
-    let full = base.join(pth);
-    fs::read_to_string(&full).map_err(|e| e.to_string())
-  })?;
-  let bytes = serialize_program(&program)?;
-  fs::write(output, bytes).map_err(|e| e.to_string())?;
-  Ok(())
 }
