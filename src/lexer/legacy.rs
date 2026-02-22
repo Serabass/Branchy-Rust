@@ -118,7 +118,14 @@ fn read_quoted(it: &mut Peekable<Chars>, end: char) -> Result<String, String> {
   while let Some(c) = it.next() {
     if c == '\\' {
       if let Some(n) = it.next() {
-        s.push(if n == end || n == '\\' { n } else { c });
+        match n {
+          'n' => s.push('\n'),
+          't' => s.push('\t'),
+          'r' => s.push('\r'),
+          '\\' => s.push('\\'),
+          _ if n == end => s.push(n),
+          _ => { s.push(c); s.push(n); }
+        }
       }
     } else if c == end {
       return Ok(s);

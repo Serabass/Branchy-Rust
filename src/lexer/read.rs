@@ -15,8 +15,16 @@ pub(super) fn read_quoted_offset(
   while let Some((off, c)) = cur.next() {
     last_end = off + c.len_utf8();
     if c == '\\' {
-      if let Some((_, n)) = cur.next() {
-        s.push(if n == end || n == '\\' { n } else { c });
+      if let Some((next_off, n)) = cur.next() {
+        last_end = next_off + n.len_utf8();
+        match n {
+          'n' => s.push('\n'),
+          't' => s.push('\t'),
+          'r' => s.push('\r'),
+          '\\' => s.push('\\'),
+          _ if n == end => s.push(n),
+          _ => { s.push(c); s.push(n); }
+        }
       }
     } else if c == end {
       return Ok((s, last_end));

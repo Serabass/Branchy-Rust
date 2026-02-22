@@ -204,6 +204,23 @@ fn run_quoted_string_literal() {
 }
 
 #[test]
+fn string_escape_newline_and_tab() {
+  let p = parse_program(r#"[ "a\nb"; "x\ty"; ]"#).unwrap();
+  let out = run_with_seed(&p, 0);
+  let allowed: HashSet<_> = ["a\nb", "x\ty"].into_iter().collect();
+  assert!(
+    allowed.contains(out.as_str()),
+    "expected literal newline/tab in output, got {:?}",
+    out
+  );
+  if out == "a\nb" {
+    assert_eq!(out.as_bytes()[1], b'\n');
+  } else {
+    assert_eq!(out.as_bytes()[1], b'\t');
+  }
+}
+
+#[test]
 fn optional_param_coin_flip() {
   // :?var may output or skip (50/50); use + to concatenate
   let p = parse_program(
@@ -233,4 +250,65 @@ fn optional_param_coin_flip() {
   }
   assert!(saw_with, ":?who should sometimes output");
   assert!(saw_without, ":?who should sometimes be omitted");
+}
+
+#[test]
+fn optional_param_in_call_no_function() {
+  let p = parse_program(
+    r#"
+[
+  hello :var1 :?var2 {
+    :var1 = [ world; ];
+    :var2 = [ there; ];
+  };
+]
+"#,
+  )
+  .unwrap();
+  let allowed: HashSet<_> = ["hello world", "hello world there"].into_iter().collect();
+  let mut saw_one = false;
+  let mut saw_two = false;
+  for seed in 0..40u64 {
+    let out = run_with_seed(&p, seed);
+    assert!(
+      allowed.contains(out.as_str()),
+      "seed {} got {:?}",
+      seed,
+      out
+    );
+    if out == "hello world" {
+      saw_one = true;
+    }
+    if out == "hello world there" {
+      saw_two = true;
+    }
+  }
+  assert!(saw_one, ":?var2 in call should sometimes be omitted");
+  assert!(saw_two, ":?var2 in call should sometimes be included");
+}
+
+#[test]
+fn optional_params_in_template_body_undefined_ok() {
+  let p = parse_program(
+    r#"
+!format(:_) = [ :?prefix; :name; :?suffix; ]
+[ format :_ { :name = [ solo; ]; }; ]
+"#,
+  )
+  .unwrap();
+  let allowed: HashSet<_> = ["", "solo"].into_iter().collect();
+  let mut saw_solo = false;
+  for seed in 0..30u64 {
+    let out = run_with_seed(&p, seed);
+    assert!(
+      allowed.contains(out.as_str()),
+      "seed {}: missing :prefix/:suffix must not yield undefined param, got {:?}",
+      seed,
+      out
+    );
+    if out == "solo" {
+      saw_solo = true;
+    }
+  }
+  assert!(saw_solo, "body branch sometimes picks :name -> solo");
 }
