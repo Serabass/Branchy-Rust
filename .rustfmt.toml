@@ -1,15 +1,7 @@
-# Rust code style: standard project config
+# Rust code style (stable rustfmt)
 # https://rust-lang.github.io/rustfmt/
 
 edition = "2021"
 max_width = 100
-tab_spaces = 4
-
-# Imports: group std, then external, then crate
-group_imports = "StdExternalCrate"
-imports_granularity = "Crate"
-
-# Consistency
-reorder_impl_items = true
-format_strings = true
+tab_spaces = 2
 use_small_heuristics = "Default"
