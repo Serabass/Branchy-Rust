@@ -1,0 +1,28 @@
+@demo = [ "Run without input to see a random demo"; ]
+"help" = [ "Events: no input, demo, help"; ]
+
+!greet(:who) = [ "Hello, "; :who; "!" ];
+!tag(:name, :body) = [ "<"; :name; ">"; :body; "</"; :name; ">" ];
+!withOptional(:_) = [ "result: " + :?x; ];
+!mixinWrap(:_) = [ [ A; B; ]; ...:mid; [ C; ]; ];
+
+[
+  42;
+  "hello " + "world";
+  "x" * 5;
+  "y" * 1..3;
+  [ "a"; "b"; "c"; ];
+  prefix <one|two|three>;
+  !greet("showcase");
+  config :host :port { :timeout = 30; :retries = 3; };
+  !tag("div", "content");
+  withOptional :_ { :x = [ value; ]; };
+  mixinWrap :_ { :mid = [ X; Y; ]; };
+  [ "y"; "x"; ] * 1..8;
+  word <aa|bb|cc> * 2;
+  [a-zA-Z:6];
+  [0-9:4];
+  "id_" + [a-zA-Z0-9:5];
+  !upper("mixed");
+  !concat("a", "b");
+]

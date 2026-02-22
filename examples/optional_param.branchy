@@ -1,0 +1,4 @@
+!greet(:_) = [ "privet " + :?who; ]
+[
+  greet :_ { :who = [ Vasya; ]; };
+]

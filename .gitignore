@@ -1,0 +1,41 @@
+# Rust / Cargo
+/target/
+**/*.rs.bk
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Build / debug
+*.log
+*.pdb
+*.so
+*.dylib
+*.dll
+
+# Fuzz / coverage (if you add later)
+fuzz/artifacts/
+fuzz/corpus/
+coverage/
+*.profraw
+*.profdata
+
+# Misc
+*.bak
+*.tmp
+.cache/

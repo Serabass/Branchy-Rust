@@ -1,0 +1,79 @@
+services:
+  app:
+    image: rust:1.85-bookworm
+    working_dir: /app
+    environment:
+      CARGO_HOME: /cache/cargo
+      CARGO_TARGET_DIR: /cache/target
+    volumes:
+      - .:/app
+      - branchy_cargo_cache:/cache/cargo
+      - branchy_target:/cache/target
+    entrypoint: ["/bin/sh", "-c", "cargo test && exec cargo run -- \"$@\""]
+
+  test:
+    image: rust:1.85-bookworm
+    working_dir: /app
+    environment:
+      CARGO_HOME: /cache/cargo
+      CARGO_TARGET_DIR: /cache/target
+    volumes:
+      - .:/app
+      - branchy_cargo_cache:/cache/cargo
+      - branchy_target:/cache/target
+    command: cargo test
+
+  coverage:
+    build:
+      context: .
+      dockerfile: Dockerfile.coverage
+    working_dir: /app
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      CARGO_HOME: /cache/cargo
+      CARGO_TARGET_DIR: /cache/target
+    volumes:
+      - .:/app
+      - branchy_cargo_cache:/cache/cargo
+      - branchy_target:/cache/target
+    command: cargo tarpaulin --out Html --out Stdout --output-dir coverage --skip-clean
+
+  build:
+    image: rust:1.85-bookworm
+    working_dir: /app
+    environment:
+      CARGO_HOME: /cache/cargo
+      CARGO_TARGET_DIR: /cache/target
+    volumes:
+      - .:/app
+      - branchy_cargo_cache:/cache/cargo
+      - branchy_target:/cache/target
+    entrypoint: ["/bin/sh", "-c", "cargo test && cargo build --release"]
+
+  web:
+    image: rust:1.85-bookworm
+    working_dir: /app
+    environment:
+      CARGO_HOME: /cache/cargo
+      CARGO_TARGET_DIR: /cache/target
+      RUST_LOG: info
+    volumes:
+      - .:/app
+      - branchy_cargo_cache:/cache/cargo
+      - branchy_target:/cache/target
+    entrypoint: ["/bin/sh", "-c", "cargo test && exec cargo run --bin branchy-server"]
+    command: []
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "8081:80"
+    depends_on:
+      - web
+
+volumes:
+  branchy_cargo_cache:
+  branchy_target:

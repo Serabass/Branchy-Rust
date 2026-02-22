@@ -1,0 +1,3 @@
+!shout(:x) = [ !upper(:x); ]
+!mood() = [ happy; sad; meh; ]
+[ unused main in lib; ]

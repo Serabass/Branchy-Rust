@@ -1,0 +1,14 @@
+!title(:text) = [ "# "; :text; ];
+!pair(:a, :b) = [ "("; :a; ", "; :b; ")" ];
+!row(:_) = [ "| "; :left; " | "; :right; " |" ];
+!greet(:_) = [ "Hello, "; :who; "!" ];
+!withDefault(:_) = [ "value: " + :?opt; ];
+
+[
+  !title("Variables");
+  !pair("first", "second");
+  !row :_ { :left = [ A; B; ]; :right = [ 1; 2; ]; };
+  !greet :_ { :who = [ Alice; Bob; ]; };
+  !withDefault :_ { :opt = [ something; ]; };
+  !withDefault :_;
+]

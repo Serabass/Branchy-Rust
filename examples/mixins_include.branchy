@@ -1,0 +1,5 @@
+[
+  head;
+  ...include "snippet.branchy";
+  tail;
+]

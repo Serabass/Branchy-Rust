@@ -1,0 +1,3 @@
+FROM rust:1.88-bookworm
+RUN cargo install cargo-tarpaulin
+WORKDIR /app

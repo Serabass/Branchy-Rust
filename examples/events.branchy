@@ -1,0 +1,6 @@
+@start = [ "Starting..."; "Ready."; ]
+@stop = [ "Stopping."; "Bye."; ]
+"help" = [ "Usage: start | stop | help"; ]
+~"err.*" = [ Error; "Unknown."; ]
+
+[ "Run with: branchy run examples/events.branchy <start|stop|help|error>"; ]
