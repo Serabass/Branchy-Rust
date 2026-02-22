@@ -6,7 +6,7 @@
 !layout(:_) = [ "header: "; :header; " footer: "; :footer; " theme: "; :theme; ];
 !query(:_) = [ "SELECT "; :fields; " FROM "; :table; " "; :?limit; ];
 !greet(:_) = [ "Hello, "; :who; "! "; :?extra; ];
-!format(:_) = [ :prefix; :name; :suffix; ];
+!format(:_) = [ :?prefix; :name; :?suffix; ];
 
 [
   section :_ { :title = [ Intro; Overview; ]; :body = [ "Some text here."; "More content."; ]; };
