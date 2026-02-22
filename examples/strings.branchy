@@ -1,10 +1,10 @@
 [
   "hello";
-  'world';
+  "world";
   "a" + "b";
   "x" * 5;
   "y" * 1..3;
-  [ "y"; "x"; ] * 1..20;
+  [ "y"; "x" ] * 1..20;
   word <aa|bb|cc> * 3;
-  "prefix_" + "suffix";
+  "prefix_" + "suffix"
 ]

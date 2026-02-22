@@ -1,8 +1,8 @@
-//! Run and compile commands for CLI.
+//! Run, compile and fmt commands for CLI.
 
 use branchy::{
-  default_registry, deserialize_program, interpret, parse_program, resolve_includes,
-  serialize_program,
+  default_registry, deserialize_program, format_program, interpret, parse_program,
+  resolve_includes, serialize_program, FormatOptions,
 };
 use rand::rngs::StdRng;
 use rand::SeedableRng;
@@ -43,5 +43,35 @@ pub fn compile(input: &str, output: &str) -> Result<(), String> {
   })?;
   let bytes = serialize_program(&program)?;
   fs::write(output, bytes).map_err(|e| e.to_string())?;
+  Ok(())
+}
+
+/// Format .branchy source: read file or stdin, parse, format, write to stdout or file.
+/// If check is true, only verify that the file is already formatted; exit with error if not.
+pub fn fmt(path: Option<&str>, write: bool, check: bool) -> Result<(), String> {
+  let src = match path {
+    Some(p) => fs::read_to_string(p).map_err(|e| e.to_string())?,
+    None => {
+      use std::io::Read;
+      let mut s = String::new();
+      std::io::stdin().read_to_string(&mut s).map_err(|e| e.to_string())?;
+      s
+    }
+  };
+  let program = parse_program(&src).map_err(|e| e.to_string())?;
+  let out = format_program(&program, &FormatOptions::default());
+  if check {
+    if out != src {
+      let name = path.unwrap_or("stdin");
+      return Err(format!("{} is not formatted (run branchy fmt -w to fix)", name));
+    }
+    return Ok(());
+  }
+  if write {
+    let p = path.ok_or("--write requires a file path")?;
+    fs::write(p, out).map_err(|e| e.to_string())?;
+  } else {
+    print!("{}", out);
+  }
   Ok(())
 }

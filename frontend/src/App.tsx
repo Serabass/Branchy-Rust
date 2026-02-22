@@ -23,6 +23,9 @@ type RunErr = {
   end_column?: number
 }
 
+type FormatOk = { formatted: string }
+type FormatErr = RunErr
+
 const defaultSource = `[
   greet :who { :who = [ world; human; ]; };
 ]`
@@ -39,6 +42,7 @@ export default function App() {
     | null
   >(null)
   const [loading, setLoading] = useState(false)
+  const [formatLoading, setFormatLoading] = useState(false)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
   const decorationIdsRef = useRef<string[]>([])
 
@@ -161,6 +165,37 @@ export default function App() {
     }
   }
 
+  async function handleFormat() {
+    setFormatLoading(true)
+    setResult(null)
+    try {
+      const res = await fetch('/api/format', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source }),
+      })
+      const data = (await res.json()) as FormatOk | FormatErr
+      if (!res.ok) {
+        const errMsg = 'error' in data ? data.error : res.statusText
+        setResult({
+          error: errMsg,
+          line: 'line' in data ? data.line : undefined,
+          column: 'column' in data ? data.column : undefined,
+          end_line: 'end_line' in data ? data.end_line : undefined,
+          end_column: 'end_column' in data ? data.end_column : undefined,
+        })
+        return
+      }
+      if ('formatted' in data) {
+        setSource(data.formatted)
+      }
+    } catch (e) {
+      setResult({ error: e instanceof Error ? e.message : String(e) })
+    } finally {
+      setFormatLoading(false)
+    }
+  }
+
   return (
     <>
       <h1>Branchy</h1>
@@ -224,9 +259,19 @@ export default function App() {
           placeholder="пусто = случайный"
         />
       </div>
-      <button onClick={handleRun} disabled={loading} className="run-btn">
-        {loading ? 'Выполняю…' : 'Выполнить'}
-      </button>
+      <div className="button-row">
+        <button onClick={handleRun} disabled={loading} className="run-btn">
+          {loading ? 'Выполняю…' : 'Выполнить'}
+        </button>
+        <button
+          onClick={handleFormat}
+          disabled={formatLoading}
+          className="format-btn"
+          type="button"
+        >
+          {formatLoading ? 'Форматирую…' : 'Форматировать'}
+        </button>
+      </div>
       <div className="result-slot" aria-live="polite">
         {loading && !result && (
           <div className="result result-loading">Выполняю…</div>

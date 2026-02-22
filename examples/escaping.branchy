@@ -1,9 +1,9 @@
 [
   "quote inside: \"hello\"";
-  'apostrophe inside: \'bye\'';
+  "apostrophe inside: 'bye'";
   "backslash: \\";
   "path: C:\\Users\\dev";
-  "both: \\\" and \\\'";
-  'double in single: "no escape"';
-  "single in double: 'no escape'";
+  "both: \\\" and \\\\'";
+  "double in single: \"no escape\"";
+  "single in double: 'no escape'"
 ]

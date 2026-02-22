@@ -1,2 +1,3 @@
 include "lib.branchy";
-[ !shout(hello); !mood(); ]
+
+[ !shout(hello); !mood() ]

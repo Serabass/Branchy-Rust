@@ -12,6 +12,14 @@ path = "src/main.rs"
 name = "branchy-server"
 path = "src/bin/server.rs"
 
+[[bin]]
+name = "fmt_all"
+path = "src/bin/fmt_all.rs"
+
+[[bin]]
+name = "check_fmt"
+path = "src/bin/check_fmt.rs"
+
 [dependencies]
 rand = "0.8"
 regex = "1.10"

@@ -1,14 +1,14 @@
-//! API handlers: examples, health, run.
+//! API handlers: examples, health, run, format.
 
 use crate::ast::SourceError;
-use crate::{interpret, parse_program};
+use crate::{format_program, interpret, parse_program, FormatOptions};
 use axum::{extract::State, Json};
 use rand::rngs::StdRng;
 use rand::SeedableRng;
 use std::path::Path;
 
 use super::error::{error_response, ErrorResponse};
-use super::types::{ExampleItem, RunRequest, RunResponse};
+use super::types::{ExampleItem, FormatRequest, FormatResponse, RunRequest, RunResponse};
 use super::AppState;
 use axum::http::StatusCode;
 
@@ -77,4 +77,12 @@ pub async fn run(
     )
   })?;
   Ok(Json(RunResponse { result, trace }))
+}
+
+pub async fn format(
+  Json(body): Json<FormatRequest>,
+) -> Result<Json<FormatResponse>, (StatusCode, Json<ErrorResponse>)> {
+  let program = parse_program(&body.source).map_err(error_response)?;
+  let formatted = format_program(&program, &FormatOptions::default());
+  Ok(Json(FormatResponse { formatted }))
 }

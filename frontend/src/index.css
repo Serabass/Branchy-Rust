@@ -88,7 +88,14 @@ label {
   margin-bottom: 1rem;
 }
 
-button.run-btn {
+.button-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+button.run-btn,
+button.format-btn {
   font-size: 0.95rem;
   padding: 0.5rem 1.25rem;
   min-width: 8.5rem;
@@ -102,6 +109,14 @@ button.run-btn {
 
 button.run-btn:hover {
   background: #1177bb;
+}
+
+button.format-btn {
+  background: #3c3c3c;
+}
+
+button.format-btn:hover {
+  background: #505050;
 }
 
 button:disabled {

@@ -1,3 +1,6 @@
-!wrap(:_) = [ a; b; ...:extra; c; ]
+!wrap(:_) = [ a; b; ...:extra; c ];
 
-[ wrap :_ { :extra = [ x; y; ]; }; ]
+
+[ wrap :_ {
+  :extra = [ x; y ]
+} ]

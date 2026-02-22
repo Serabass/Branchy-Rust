@@ -1,13 +1,4 @@
-[
-  hello;
-  hello :var1 :?var2 {
-    :var1 = [
-       world;
-       wall;
-    ]
-    :var2 = [
-       world;
-       wall;
-    ]
-  };
-]
+[ hello; hello :var1 :?var2 {
+  :var1 = [ world; wall ];
+  :var2 = [ world; wall ]
+} ]

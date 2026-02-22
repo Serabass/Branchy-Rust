@@ -1,9 +1,17 @@
-!api(:method, :path) = [ "api "; :method; " "; :path; " "; :?auth; ];
-!request(:method, :path) = [ :method; " "; :path; " "; :headers; ];
+!api(:method, :path) = [ "api "; :method; " "; :path; " "; :?auth ];
+
+!request(:method, :path) = [ :method; " "; :path; " "; :headers ];
+
 
 [
-  api :get :users { :auth = "Bearer token"; };
-  api :post :login { :auth = "basic"; };
+  api :get :users {
+    :auth = "Bearer token"
+  };
+  api :post :login {
+    :auth = "basic"
+  };
   api :get :health;
-  request :GET :users { :headers = [ Accept: json; ]; };
+  request :GET :users {
+    :headers = [ Accept; :json ]
+  }
 ]

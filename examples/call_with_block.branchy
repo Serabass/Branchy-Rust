@@ -1,5 +1,12 @@
 [
-  config :host :port { :timeout = 30; :retries = 3; };
-  layout :header :footer { :theme = dark; };
-  query :sql { :limit = 100; };
+  config :host :port {
+    :timeout = 30;
+    :retries = 3
+  };
+  layout :header :footer {
+    :theme = dark
+  };
+  query :sql {
+    :limit = 100
+  }
 ]

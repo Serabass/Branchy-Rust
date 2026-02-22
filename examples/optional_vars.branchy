@@ -1,22 +1,22 @@
-!line(:_) = [ :a; " "; :?b; " "; :?c; ];
-!format(:_) = [ "[ "; :?prefix; :name; :?suffix; " ]"; ];
+!line(:_) = [ :a; " "; :?b; " "; :?c ];
+
+!format(:_) = [ "[ "; :?prefix; :name; :?suffix; " ]" ];
+
 
 [
   line :_ {
-    :a = [ X; ];
-    :b = [ Y; ];
-    :c = [ Z; ];
+    :a = [X];
+    :b = [Y];
+    :c = [Z]
   };
-
   line :_ {
-    :a = [ only; ];
-  };
-
-  format :_ {
-    :name = [ item; ];
-    :prefix = [ *; ];
+    :a = [only]
   };
   format :_ {
-    :name = [ item; ];
+    :name = [item];
+    :prefix = [ "*" ]
   };
+  format :_ {
+    :name = [item]
+  }
 ]

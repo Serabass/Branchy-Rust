@@ -1,9 +1,8 @@
 !greet(:who) = [ "Hello, "; :who; "!" ];
+
 !add(:a, :b) = [ :a + :b ];
+
 !repeat(:s, :n) = [ :s * :n ];
 
-[
-  !greet("мир");
-  !add(1, 2);
-  !repeat("na ", 3);
-]
+
+[ !greet("мир"); !add(1, 2); !repeat("na ", 3) ]

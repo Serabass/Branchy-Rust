@@ -2,5 +2,5 @@
   lang <ru|en>;
   mode <dark|light>;
   greet <привет|hello|bonjour>;
-  count <one|two|three>;
+  count <one|two|three>
 ]

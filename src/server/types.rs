@@ -54,3 +54,13 @@ pub struct ExampleItem {
   pub name: String,
   pub source: String,
 }
+
+#[derive(Deserialize)]
+pub struct FormatRequest {
+  pub source: String,
+}
+
+#[derive(Serialize)]
+pub struct FormatResponse {
+  pub formatted: String,
+}

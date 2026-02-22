@@ -1,11 +1,14 @@
 !wrap(:tag, :body) = [ "<"; :tag; ">"; :body; "</"; :tag; ">" ];
 
+
 [
   42;
   "text" + " more";
   "x" * 4;
-  [ "y"; "x"; ] * 1..10;
+  [ "y"; "x" ] * 1..10;
   !wrap("div", "content");
   section <header|main|footer>;
-  api :get :users { :auth = true; };
+  api :get :users {
+    :auth = true
+  }
 ]

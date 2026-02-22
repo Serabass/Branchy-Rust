@@ -272,3 +272,45 @@ async fn run_not_found_route_returns_404() {
   let res = app.oneshot(req).await.unwrap();
   assert_eq!(res.status(), StatusCode::NOT_FOUND);
 }
+
+#[tokio::test]
+async fn format_returns_formatted() {
+  let app = app();
+  let body = json!({ "source": "[ a;b;c; ]" }).to_string();
+  let req = Request::builder()
+    .method("POST")
+    .uri("/format")
+    .header("content-type", "application/json")
+    .body(Body::from(body))
+    .unwrap();
+  let res = app.oneshot(req).await.unwrap();
+  assert_eq!(res.status(), StatusCode::OK);
+  let bytes = axum::body::to_bytes(res.into_body(), usize::MAX)
+    .await
+    .unwrap();
+  let out: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+  let formatted = out["formatted"].as_str().unwrap();
+  assert!(formatted.contains("[ "));
+  assert!(formatted.contains("a"));
+  assert!(formatted.contains("b"));
+  assert!(formatted.contains("c"));
+}
+
+#[tokio::test]
+async fn format_invalid_returns_error() {
+  let app = app();
+  let body = json!({ "source": "[ unclosed ; " }).to_string();
+  let req = Request::builder()
+    .method("POST")
+    .uri("/format")
+    .header("content-type", "application/json")
+    .body(Body::from(body))
+    .unwrap();
+  let res = app.oneshot(req).await.unwrap();
+  assert_eq!(res.status(), StatusCode::BAD_REQUEST);
+  let bytes = axum::body::to_bytes(res.into_body(), usize::MAX)
+    .await
+    .unwrap();
+  let out: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+  assert!(out["error"].as_str().unwrap().len() > 0);
+}

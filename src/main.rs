@@ -9,6 +9,7 @@ fn main() -> Result<(), String> {
   if args.len() < 2 {
     eprintln!("Usage: branchy run <file.branchy|file.branchyc> [input] [--seed N]");
     eprintln!("       branchy compile <file.branchy> -o <file.branchyc>");
+    eprintln!("       branchy fmt [path] [-w|--write] [-c|--check]");
     std::process::exit(1);
   }
   let sub = &args[1];
@@ -39,6 +40,27 @@ fn main() -> Result<(), String> {
       let inp = input.ok_or("branchy compile <input.branchy> -o <output.branchyc>")?;
       let out = output.ok_or("branchy compile <input.branchy> -o <output.branchyc>")?;
       run::compile(&inp, &out)
+    }
+    "fmt" | "format" => {
+      let mut path = None;
+      let mut write = false;
+      let mut check = false;
+      let mut i = 2;
+      while i < args.len() {
+        if args[i] == "-w" || args[i] == "--write" {
+          write = true;
+          i += 1;
+        } else if args[i] == "-c" || args[i] == "--check" {
+          check = true;
+          i += 1;
+        } else if path.is_none() {
+          path = Some(args[i].as_str());
+          i += 1;
+        } else {
+          return Err("branchy fmt: unexpected argument".into());
+        }
+      }
+      run::fmt(path, write, check)
     }
     _ => run::run(sub, None, None),
   }
