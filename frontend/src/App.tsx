@@ -35,7 +35,7 @@ export default function App() {
   const [seedInput, setSeedInput] = useState('')
   const [result, setResult] = useState<
     | { ok: string; trace?: TraceSpan[] }
-    | { err: string; line?: number; column?: number; end_line?: number; end_column?: number }
+    | { error: string; line?: number; column?: number; end_line?: number; end_column?: number }
     | null
   >(null)
   const [loading, setLoading] = useState(false)
@@ -142,7 +142,7 @@ export default function App() {
       if (!res.ok) {
         const errMsg = 'error' in data ? data.error : res.statusText
         setResult({
-          err: errMsg,
+          error: errMsg,
           line: 'line' in data ? data.line : undefined,
           column: 'column' in data ? data.column : undefined,
           end_line: 'end_line' in data ? data.end_line : undefined,
@@ -155,7 +155,7 @@ export default function App() {
         trace: 'trace' in data ? data.trace : undefined,
       })
     } catch (e) {
-      setResult({ err: e instanceof Error ? e.message : String(e) })
+      setResult({ error: e instanceof Error ? e.message : String(e) })
     } finally {
       setLoading(false)
     }
@@ -192,6 +192,7 @@ export default function App() {
               setSelectedExampleId('')
             }}
             onMount={handleEditorMount}
+            theme="vs-dark"
             options={{
               minimap: { enabled: false },
               fontSize: 14,
@@ -232,7 +233,7 @@ export default function App() {
         )}
         {result && (
           <div className={`result ${'ok' in result ? 'success' : 'error'}`}>
-            {'ok' in result ? result.ok : result.err}
+            {'ok' in result ? result.ok : result.error}
           </div>
         )}
       </div>

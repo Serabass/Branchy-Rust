@@ -56,6 +56,7 @@ where
     Call {
       name,
       params,
+      optional_params,
       block,
       span,
     } => {
@@ -71,6 +72,7 @@ where
       Ok(Call {
         name,
         params,
+        optional_params,
         block,
         span,
       })

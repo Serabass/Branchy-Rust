@@ -56,10 +56,19 @@ impl<'a, 'b, R: rand::RngCore> EvalState<'a, 'b, R> {
       Node::Call {
         name,
         params,
+        optional_params,
         block,
         span: call_span,
         ..
-      } => eval_call::eval_call(self, name, params, block.as_ref(), *call_span, env),
+      } => eval_call::eval_call(
+        self,
+        name,
+        params,
+        optional_params,
+        block.as_ref(),
+        *call_span,
+        env,
+      ),
       Node::InlineCall {
         name,
         options,

@@ -6,9 +6,7 @@ use std::process::Command;
 
 use common::{run_with_seed, run_with_seed_and_input};
 
-// TODO: bincode layout changed after adding Span to Node; re-enable when binformat is updated
 #[test]
-#[ignore = "AST has span fields; bincode roundtrip needs updated format"]
 fn binary_roundtrip() {
   let p = parse_program("[ x; y; ]").unwrap();
   let bytes = serialize_program(&p).unwrap();
@@ -20,7 +18,6 @@ fn binary_roundtrip() {
 }
 
 #[test]
-#[ignore = "AST has span fields; bincode roundtrip needs updated format"]
 fn binary_roundtrip_with_functions() {
   let p = parse_program(
     r#"
@@ -38,7 +35,6 @@ fn binary_roundtrip_with_functions() {
 }
 
 #[test]
-#[ignore = "AST has span fields; bincode roundtrip needs updated format"]
 fn binary_roundtrip_with_events() {
   let p = parse_program(
     r#"
@@ -59,7 +55,6 @@ fn binary_roundtrip_with_events() {
 }
 
 #[test]
-#[ignore = "AST has span fields; bincode roundtrip needs updated format"]
 fn binary_roundtrip_with_spread_param() {
   let p = parse_program(
     r#"
@@ -79,7 +74,6 @@ fn binary_roundtrip_with_spread_param() {
 }
 
 #[test]
-#[ignore = "AST has span fields; .branchyc format needs updated format"]
 fn compile_then_run_equals_source_run() {
   let bin = env!("CARGO_BIN_EXE_branchy");
   let temp = std::env::temp_dir().join("branchy_compile_test");

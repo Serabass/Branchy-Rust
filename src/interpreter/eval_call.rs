@@ -8,6 +8,7 @@ pub(super) fn eval_call<R: rand::RngCore>(
   state: &mut EvalState<'_, '_, R>,
   name: &str,
   params: &[String],
+  optional_params: &std::collections::HashSet<String>,
   block: Option<&CallBlock>,
   call_span: Option<crate::ast::Span>,
   env: &mut HashMap<String, String>,
@@ -63,7 +64,18 @@ pub(super) fn eval_call<R: rand::RngCore>(
       ));
     }
   }
-  let parts: Vec<&str> = resolved.iter().map(String::as_str).collect();
+  let parts: Vec<&str> = resolved
+    .iter()
+    .enumerate()
+    .filter_map(|(i, s)| {
+      let p = &params[i];
+      if optional_params.contains(p) && (state.rng.next_u32() % 2) == 0 {
+        None
+      } else {
+        Some(s.as_str())
+      }
+    })
+    .collect();
   Ok([name]
     .iter()
     .chain(parts.iter())

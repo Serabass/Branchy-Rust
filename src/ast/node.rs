@@ -32,6 +32,8 @@ pub enum Node {
   Call {
     name: String,
     params: Vec<String>,
+    #[serde(default)]
+    optional_params: std::collections::HashSet<String>,
     block: Option<CallBlock>,
     #[serde(skip_serializing_if = "Option::is_none")]
     span: Option<Span>,

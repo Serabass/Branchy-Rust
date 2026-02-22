@@ -73,6 +73,7 @@ include "lib.branchy";
 | Файл | Описание |
 |------|----------|
 | **showcase.branchy** | **Один большой пример: события, ветки, +/\*, :?param, шаблоны с блоком, миксины, инлайн, char block, builtins** |
+| big_blocks.branchy | Большой пример с переменными и блоками `:var = { ... }` (section, card, row, config, api, layout, query, greet, format) — удобен для замеров размер/скорость байткода |
 | api_style.branchy | Шаблоны в стиле API: `!api(:method, :path)`, вызовы с блоками и без |
 | hello.branchy | Простая ветка |
 | inline.branchy | Инлайн-варианты `<a\|b\|c>` |

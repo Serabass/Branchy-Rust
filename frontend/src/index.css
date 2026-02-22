@@ -2,8 +2,8 @@
   font-family: 'Segoe UI', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #1a1a1a;
-  background: #f5f0eb;
+  color: #e4e4e4;
+  background: #1e1e1e;
 }
 
 * {
@@ -26,15 +26,20 @@ h1 {
   font-weight: 600;
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
+  color: #fff;
 }
 
-textarea, input[type="text"] {
+textarea,
+input[type="text"],
+input[type="number"],
+select {
   font-family: 'Consolas', 'Monaco', monospace;
   font-size: 0.9rem;
   padding: 0.6rem 0.75rem;
-  border: 1px solid #c9bfb5;
+  border: 1px solid #3c3c3c;
   border-radius: 6px;
-  background: #fff;
+  background: #252526;
+  color: #e4e4e4;
   width: 100%;
   outline: none;
 }
@@ -44,20 +49,29 @@ textarea {
   resize: vertical;
 }
 
+select {
+  cursor: pointer;
+}
+
+select option {
+  background: #252526;
+  color: #e4e4e4;
+}
+
 .editor-wrap {
-  border: 1px solid #c9bfb5;
+  border: 1px solid #3c3c3c;
   border-radius: 6px;
   overflow: hidden;
-  background: #fff;
+  background: #1e1e1e;
 }
 
 .editor-wrap .trace-highlight {
-  background: rgba(144, 200, 144, 0.22);
+  background: rgba(72, 120, 72, 0.35);
   border-radius: 2px;
 }
 
 .editor-wrap .error-highlight {
-  background: rgba(220, 80, 80, 0.2);
+  background: rgba(180, 60, 60, 0.35);
   border-bottom: 2px solid #c44;
   border-radius: 2px;
 }
@@ -67,7 +81,7 @@ label {
   font-size: 0.85rem;
   font-weight: 500;
   margin-bottom: 0.35rem;
-  color: #444;
+  color: #b0b0b0;
 }
 
 .field {
@@ -80,14 +94,14 @@ button.run-btn {
   min-width: 8.5rem;
   border: none;
   border-radius: 6px;
-  background: #2d2a26;
-  color: #f5f0eb;
+  background: #0e639c;
+  color: #fff;
   cursor: pointer;
   font-weight: 500;
 }
 
-button:hover {
-  background: #1a1816;
+button.run-btn:hover {
+  background: #1177bb;
 }
 
 button:disabled {
@@ -110,19 +124,19 @@ button:disabled {
 }
 
 .result-loading {
-  background: #f0ede8;
-  border: 1px solid #e0dbd2;
-  color: #666;
+  background: #2d2d2d;
+  border: 1px solid #3c3c3c;
+  color: #909090;
 }
 
 .result.success {
-  background: #e8f0e8;
-  border: 1px solid #b8d4b8;
-  color: #1a3a1a;
+  background: #1e3a1e;
+  border: 1px solid #2d5a2d;
+  color: #b0e0b0;
 }
 
 .result.error {
-  background: #fce8e8;
-  border: 1px solid #e8b8b8;
-  color: #4a1a1a;
+  background: #3a1e1e;
+  border: 1px solid #5a2d2d;
+  color: #e0b0b0;
 }

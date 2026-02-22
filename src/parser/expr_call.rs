@@ -51,11 +51,20 @@ pub(crate) fn parse_ident_start(it: &mut TokenIter) -> Result<Node, SourceError>
         span: it.get_span(),
       })
     }
-    Some(Token::Param(_)) | Some(Token::LBrace) => {
+    Some(Token::Param(_)) | Some(Token::OptionalParam(_)) | Some(Token::LBrace) => {
       let mut params = Vec::new();
-      while matches!(it.peek(), Some(Token::Param(_))) {
-        if let Some(Token::Param(p)) = it.next() {
-          params.push(p);
+      let mut optional_params = std::collections::HashSet::new();
+      while matches!(
+        it.peek(),
+        Some(Token::Param(_)) | Some(Token::OptionalParam(_))
+      ) {
+        match it.next() {
+          Some(Token::Param(p)) => params.push(p),
+          Some(Token::OptionalParam(p)) => {
+            params.push(p.clone());
+            optional_params.insert(p);
+          }
+          _ => {}
         }
       }
       let block = if matches!(it.peek(), Some(Token::LBrace)) {
@@ -66,6 +75,7 @@ pub(crate) fn parse_ident_start(it: &mut TokenIter) -> Result<Node, SourceError>
       Ok(Node::Call {
         name,
         params,
+        optional_params,
         block,
         span: it.get_span(),
       })

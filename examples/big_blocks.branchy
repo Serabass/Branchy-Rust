@@ -1,0 +1,25 @@
+!section(:_) = [ "## "; :title; "\n"; :body; ];
+!card(:_) = [ "[ "; :name; " ] "; :desc; " (tags: "; :tags; ")" ];
+!row(:_) = [ "| "; :left; " | "; :right; " |" ];
+!config(:_) = [ "host="; :host; " port="; :port; " "; :opts; ];
+!api(:_) = [ :method; " "; :path; " "; :?auth; ];
+!layout(:_) = [ "header: "; :header; " footer: "; :footer; " theme: "; :theme; ];
+!query(:_) = [ "SELECT "; :fields; " FROM "; :table; " "; :?limit; ];
+!greet(:_) = [ "Hello, "; :who; "! "; :?extra; ];
+!format(:_) = [ :prefix; :name; :suffix; ];
+
+[
+  section :_ { :title = [ Intro; Overview; ]; :body = [ "Some text here."; "More content."; ]; };
+  card :_ { :name = [ User; Admin; ]; :desc = [ "Does stuff."; "Manages."; ]; :tags = [ a; b; c; ]; };
+  row :_ { :left = [ A; B; C; ]; :right = [ 1; 2; 3; ]; };
+  config :_ { :host = [ localhost; any; ]; :port = [ 3000; 8080; ]; :opts = [ debug; prod; ]; };
+  api :_ { :method = [ GET; POST; ]; :path = [ "/users"; "/items"; ]; :auth = [ Bearer; Basic; ]; };
+  api :_ { :method = [ GET; ]; :path = [ "/health"; ]; };
+  layout :_ { :header = [ Nav; Menu; ]; :footer = [ Copy; Links; ]; :theme = [ dark; light; ]; };
+  query :_ { :fields = [ "*"; "id,name"; ]; :table = [ users; items; ]; :limit = [ 10; 100; ]; };
+  query :_ { :fields = [ count; ]; :table = [ logs; ]; };
+  greet :_ { :who = [ Alice; Bob; Carol; ]; :extra = [ "How are you?"; ]; };
+  greet :_ { :who = [ World; ]; };
+  format :_ { :prefix = [ "*"; ]; :name = [ item; ]; :suffix = [ "*"; ]; };
+  format :_ { :name = [ solo; ]; };
+]
