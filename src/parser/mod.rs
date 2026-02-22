@@ -1,6 +1,7 @@
 //! Parser for Branchy source: program, expressions, branches, calls.
 
 mod char_block;
+mod defs;
 mod expr;
 mod expr_call;
 mod program;

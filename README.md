@@ -73,6 +73,7 @@ include "lib.branchy";
 | Файл | Описание |
 |------|----------|
 | **showcase.branchy** | **Один большой пример: события, ветки, +/\*, :?param, шаблоны с блоком, миксины, инлайн, char block, builtins** |
+| api_style.branchy | Шаблоны в стиле API: `!api(:method, :path)`, вызовы с блоками и без |
 | hello.branchy | Простая ветка |
 | inline.branchy | Инлайн-варианты `<a\|b\|c>` |
 | functions.branchy | Функции, операторы + и * |
@@ -80,13 +81,16 @@ include "lib.branchy";
 | nested.branchy | Вложенные ветки |
 | call_with_block.branchy | Шаблоны с блоками |
 | mixed.branchy | Всё вместе |
+| templates.branchy | Шаблоны с `:_`, `:?opt`, функции `!title`, `!pair`, `!row`, `!greet` |
+| optional_param.branchy | Опциональный параметр `:?var` (50/50 вывод) |
+| optional_vars.branchy | Опциональные параметры в шаблонах (`!line`, `!format` с `:?b`, `:?c`) |
+| math.branchy | Конкатенация и повтор строк (`+`, `*`) |
 | with_include.branchy, lib.branchy | Include |
 | events.branchy | События по входу |
 | mixins.branchy | Миксин ...:var (блок вызова) |
 | mixins_include.branchy, snippet.branchy | Миксин ...include "файл" |
 | escaping.branchy | Экранирование в строках |
 | char_block.branchy | Инлайн-блок символов `[a-zA-Z]`, `[abc:5]`, `[a-z:2..5]` |
-| optional_param.branchy | Опциональный параметр `:?var` (50/50 вывод) |
 
 ## Веб-сервис (фронт + nginx)
 
@@ -100,7 +104,7 @@ docker-compose up gateway web
 
 - **GET /api/health** — `200` и `ok`
 - **GET /api/examples** — JSON-массив примеров `{ "id", "name", "source" }` (файлы из `examples/`).
-- **POST /api/run** — JSON `{ "source": "…" }`, опционально `"input": "строка"`, `"seed": number`. Ответ `{ "result": "…" }` или `400`/`422` с `{ "error": "…" }`. С `seed` результат воспроизводим.
+- **POST /api/run** — JSON `{ "source": "…" }`, опционально `"input": "строка"`, `"seed": number`. Ответ `{ "result": "…" }` или `400` с телом `{ "error": "…", "line?", "column?", "end_line?", "end_column?" }`. Поля `line`/`column`/`end_line`/`end_column` при наличии — для подсветки ошибки во фронте. С `seed` результат воспроизводим.
 
 Пример вызова API напрямую:
 
